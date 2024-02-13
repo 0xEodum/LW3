@@ -1,0 +1,174 @@
+import hashlib
+from tkinter import *
+from colorama import *
+import random
+
+colors = [Fore.MAGENTA, Fore.LIGHTBLUE_EX, Fore.LIGHTRED_EX]
+
+def get_array(text):
+    print(f"{colors[1]} Введите пары координат вершин для фигуры {text} \n")
+    num_list = []
+    if text == "Треугольник":
+        k = 0
+        while k != 3:
+            input_string = input(f"{colors[0]}Введите пару чисел (или пустую строку для завершения): {Style.RESET_ALL}")
+            if not input_string:
+                break
+
+            numbers = input_string.split()
+
+            if len(numbers) != 2:
+                print(f"{colors[2]}Пожалуйста, введите ровно две цифры{Style.RESET_ALL}!")
+                continue
+
+            try:
+                numbers = tuple(int(x) for x in numbers)
+            except ValueError:
+                print(f"{colors[2]}Пожалуйста, введите целочисленные значения!{Style.RESET_ALL}")
+                continue
+
+            num_list.append(numbers)
+            k += 1
+
+        return num_list
+    if text == "Четырехугольник":
+        k = 0
+        while k != 4:
+            input_string = input(f"{colors[0]}Введите пару чисел (или пустую строку для завершения): {Style.RESET_ALL}")
+            if not input_string:
+                break
+
+            numbers = input_string.split()
+
+            if len(numbers) != 2:
+                print(f"{colors[2]}Пожалуйста, введите ровно две цифры{Style.RESET_ALL}!")
+                continue
+
+            try:
+                numbers = tuple(int(x) for x in numbers)
+            except ValueError:
+                print(f"{colors[2]}Пожалуйста, введите целочисленные значения!{Style.RESET_ALL}")
+                continue
+
+            num_list.append(numbers)
+            k += 1
+
+        return num_list
+
+
+class Triangle:
+    def __init__(self, coords, canvas):
+        self.coords = coords
+        self.id = id(self)
+        self.canvas = canvas
+        self.polygon_id = canvas.create_polygon(*self.coords, outline="black", fill="")
+
+    def _generate_id(self):
+        text = ""
+        for x, y in self.coords:
+            text += str(x) + ":" + str(y) + "_"
+        return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+    def draw(self):
+
+
+    def move(self, dx, dy):
+
+
+    def remove(self):
+
+
+class Tetragon:
+    def __init__(self, coords, canvas):
+        self.coords = coords
+        self.id = self._generate_id()
+        self.canvas = canvas
+        self.polygon_id = canvas.create_polygon(*self.coords, outline="black", fill="")
+
+    def _generate_id(self):
+        text = ""
+        for x, y in self.coords:
+            text += str(x) + ":" + str(y) + "_"
+        return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+    def draw(self):
+
+    def move(self, dx, dy):
+
+
+    def remove(self):
+
+coordstriangle = get_array("Треугольник")
+coordstetragon = get_array("Четырехугольник")
+
+
+root = Tk()
+w =  600
+h = 400
+x = w//2
+y = h//2
+canvas = Canvas(root, width=w, height=h, bg="white")
+canvas.pack(pady=20)
+
+triangle = canvas.create_polygon(coordstriangle, fill='', outline="green", width=2, dash=(5, 10))
+tetragon = canvas.create_polygon(coordstetragon, fill='', outline="red", width=2, dash=(5, 10))
+
+
+def left_triangle(event):
+    x = -10
+    y = 0
+    canvas.move(triangle, x, y)
+
+def right_triangle(event):
+    x = 10
+    y = 0
+    canvas.move(triangle, x, y)
+
+def up_triangle(event):
+    x = 0
+    y = -10
+    canvas.move(triangle, x, y)
+
+def down_triangle(event):
+    x = 0
+    y = 10
+    canvas.move(triangle, x, y)
+
+def down_tetragon(event):
+    x = 0
+    y = 10
+    canvas.move(tetragon, x, y)
+
+def up_tetragon(event):
+    x = 0
+    y = -10
+    canvas.move(tetragon, x, y)
+
+def left_tetragon(event):
+    x = -10
+    y = 0
+    canvas.move(tetragon, x, y)
+
+def right_tetragon(event):
+    x = 10
+    y = 0
+    canvas.move(tetragon, x, y)
+
+root.bind("<Left>", left_triangle)
+root.bind("<Right>", right_triangle)
+root.bind("<Up>", up_triangle)
+root.bind("<Down>", down_triangle)
+
+root.bind("a", left_tetragon)
+root.bind("d", right_tetragon)
+root.bind("w", up_tetragon)
+root.bind("s", down_tetragon)
+
+
+root.mainloop()
+
+
+
+
+
+
