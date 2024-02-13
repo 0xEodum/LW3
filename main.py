@@ -1,4 +1,5 @@
 import hashlib
+import time
 from tkinter import Tk, Canvas
 from colorama import Fore, Style
 import random
@@ -10,10 +11,12 @@ class Shape:
         self.canvas = canvas
         self.coords = coords
         self.polygon_id = None
+        self.id = self._generate_id(coords)
 
     def _generate_id(self, coords):
         text = "_".join([f"{x}:{y}" for x, y in coords])
-        return hashlib.sha256(text.encode('utf-8')).hexdigest()
+        unique_text = text + "_" + str(time.time())
+        return hashlib.sha256(unique_text.encode('utf-8')).hexdigest()
 
     def draw(self, coords, outline, fill='', width=2, dash=None):
         self.polygon_id = self.canvas.create_polygon(coords, outline=outline, fill=fill, width=width, dash=dash)
@@ -127,8 +130,12 @@ def main():
     print(f"{colors[1]} E - удалить четырехугольник")
     print(f"{colors[1]} Ctrl - проверка пересечения")
 
+
     triangle = Triangle(canvas, triangle_coords)
     tetragon = Tetragon(canvas, tetragon_coords)
+
+    print(f"{colors[0]} ID треугольника = {triangle.id} {Style.RESET_ALL}")
+    print(f"{colors[0]} ID четырехугольника = {tetragon.id} {Style.RESET_ALL}")
 
     setup_bindings(canvas, triangle, tetragon, root)
     root.mainloop()
